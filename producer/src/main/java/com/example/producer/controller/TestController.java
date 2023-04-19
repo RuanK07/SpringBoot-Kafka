@@ -1,6 +1,7 @@
 package com.example.producer.controller;
 
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,9 @@ public class TestController {
 
     @GetMapping("send")
     public ResponseEntity<?> send() {
-        kafkaTemplate.send("topic-1", "Envio de: " + LocalDateTime.now());
+        IntStream.range(1, 50)
+        		.boxed()
+        		.forEach(n -> kafkaTemplate.send("topic-1", "Número"+ n));
         return ResponseEntity.ok().build();
     }
 }
