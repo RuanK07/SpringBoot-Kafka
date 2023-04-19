@@ -1,5 +1,4 @@
-package com.example.consumer.config;
-
+package com.example.consumer2.config;
 
 import java.util.HashMap;
 

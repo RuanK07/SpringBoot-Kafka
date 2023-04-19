@@ -48,4 +48,22 @@ public class ProducerKafkaConfig {
     public NewTopic topic1() {
         return new NewTopic("topic-1", 10, Short.valueOf("1"));
     }
+
+//  Cria topicos com configs a partir do brocker
+//
+//  @Bean
+//  public NewTopic topic1() {
+////    return TopicBuilder.name("topic-1").build();
+//  }
+
+//  Cria diversos topicos a partir de uma bean
+//  
+//  @Bean
+//  public KafkaAdmin.NewTopics topics() {
+//      return new KafkaAdmin.NewTopics(
+//              return TopicBuilder.name("topic-1").build,
+//              return TopicBuilder.name("topic-2").build,
+//              return TopicBuilder.name("topic-3").build
+//      );
+//  }
 }
