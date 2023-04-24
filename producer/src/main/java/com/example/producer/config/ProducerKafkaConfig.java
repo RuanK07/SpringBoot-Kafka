@@ -1,5 +1,6 @@
 package com.example.producer.config;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -9,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 @Configuration
@@ -34,6 +37,20 @@ public class ProducerKafkaConfig {
     public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
+    
+    @Bean
+    public ProducerFactory<String, Object> JsonProducerFactory() {
+        var configs = new HashMap<String, Object>();
+        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(configs, new StringSerializer(), new JsonSerializer<>());
+    }
+    
+    @Bean
+    public KafkaTemplate<String, Serializable> JsonKafkaTemplate() {
+        return new KafkaTemplate(JsonProducerFactory());
+    }
 
 
     //criando um topico a partir da propria aplicacao
@@ -44,10 +61,10 @@ public class ProducerKafkaConfig {
         return new KafkaAdmin(configs);
     }
 
-    @Bean
-    public NewTopic topic1() {
-        return new NewTopic("topic-1", 2, Short.valueOf("1"));
-    }
+//    @Bean
+//    public NewTopic topic1() {
+//        return new NewTopic("topic-1", 2, Short.valueOf("1"));
+//    }
 
 //  Cria topicos com configs a partir do brocker
 //
@@ -58,12 +75,11 @@ public class ProducerKafkaConfig {
 
 //  Cria diversos topicos a partir de uma bean
 //  
-//  @Bean
-//  public KafkaAdmin.NewTopics topics() {
-//      return new KafkaAdmin.NewTopics(
-//              return TopicBuilder.name("topic-1").build,
-//              return TopicBuilder.name("topic-2").build,
-//              return TopicBuilder.name("topic-3").build
-//      );
-//  }
+    @Bean
+	public KafkaAdmin.NewTopics topics() {
+    	return new KafkaAdmin.NewTopics(
+    			TopicBuilder.name("topic-1").partitions(2).replicas(1).build(),
+	            TopicBuilder.name("person-topic").partitions(2).build()
+	    );
+	}
 }
