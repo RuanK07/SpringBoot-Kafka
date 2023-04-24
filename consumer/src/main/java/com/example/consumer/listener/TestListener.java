@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.consumer.model.Person;
 
+import custom.PersonCustomListener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -48,9 +49,17 @@ public class TestListener {
 		log.info(message);
 	}
 	
-	@KafkaListener(topics = "person-topic", groupId = "group-1", containerFactory = "personKafkaListenerContainerFactory")
-	public void Listen(Person person) {
-		log.info("Pessoa: {}", person);
+	@PersonCustomListener(groupId = "group-1")
+	public void create(Person person) {
+		log.info("Thread: {}", Thread.currentThread().getId());
+		log.info("Criar: {}", person);
 	}
+	
+	@PersonCustomListener(groupId = "group-2")
+	public void history(Person person) {
+		log.info("Thread: {}", Thread.currentThread().getId());
+		log.info("Histórico: {}", person);
+	}
+
 
 }
