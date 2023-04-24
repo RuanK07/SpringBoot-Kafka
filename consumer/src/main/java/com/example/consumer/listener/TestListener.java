@@ -44,9 +44,9 @@ public class TestListener {
 //				);
 //	}
 	
-	@KafkaListener(topics = "topic-1", groupId = "group-1")
+	@KafkaListener(topics = "topic-1", groupId = "group-1", concurrency = "2")
 	public void Listen(String message) {
-		log.info(message);
+		log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
 	}
 	
 	@PersonCustomListener(groupId = "group-1")
