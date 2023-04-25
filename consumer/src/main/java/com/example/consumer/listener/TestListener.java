@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.listener.adapter.ConsumerRecordMetadata;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -47,6 +48,16 @@ public class TestListener {
 	@KafkaListener(topics = "topic-1", groupId = "group-1", concurrency = "2")
 	public void Listen(String message) {
 		log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
+	}
+	
+	@KafkaListener(topicPartitions = {@TopicPartition(topic = "my-topic", partitions = "0")}, groupId = "my-group")
+	public void listen2(String message, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
+		log.info("Partition 0: {} Message: {}", partition, message);
+	}
+	
+	@KafkaListener(topicPartitions = {@TopicPartition(topic = "my-topic", partitions = "1-9")}, groupId = "my-group")
+	public void Listen3(String message, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
+		log.info("Partition 1-9: {} Message: {}", partition, message);
 	}
 	
 	@PersonCustomListener(groupId = "group-1")
