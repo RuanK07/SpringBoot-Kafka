@@ -14,12 +14,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 public @interface PersonCustomListener {
 	
 	@AliasFor(annotation = KafkaListener.class, attribute = "groupId")
-	String groupId() default "";
-	
-	@AliasFor(annotation = KafkaListener.class, attribute = "topics")
-	String topics() default "person-topics";
-	
-	@AliasFor(annotation = KafkaListener.class, attribute = "containerFactory")
-	String containerFactory() default "personKafkaListenerContainerFactory";
+    String groupId() default "";
 
+    @AliasFor(annotation = KafkaListener.class, attribute = "topics")
+    String[] topics() default "person-topic";
+
+    @AliasFor(annotation = KafkaListener.class, attribute = "containerFactory")
+    String containerFactory() default "jsonKafkaListenerContainerFactory";
 }

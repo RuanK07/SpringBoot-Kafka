@@ -11,6 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.producer.model.City;
 import com.example.producer.model.Person;
 
 @RestController
@@ -38,5 +39,10 @@ public class TestController {
     @GetMapping("send-person")
     public void sendPerson() {
         jsonKafkaTemplate.send("person-topic", new Person("João", new Random().nextInt(50)));
+    }
+    
+    @GetMapping("send-city")
+    public void sendCity() {
+    	jsonKafkaTemplate.send("city-topic", new City("Porto Alegre", "RS"));
     }
 }

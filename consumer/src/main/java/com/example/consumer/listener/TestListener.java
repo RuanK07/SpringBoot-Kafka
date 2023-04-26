@@ -11,6 +11,7 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import com.example.consumer.model.City;
 import com.example.consumer.model.Person;
 
 import custom.PersonCustomListener;
@@ -23,7 +24,7 @@ public class TestListener {
 	@KafkaListener(topics = "topic-1", groupId = "group-1")
     public void listen(String message) {
         log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
-    }
+   }
 	
 	@KafkaListener(topics = "my-topic", groupId = "my-group")
 	public void Listen2(String message) {
@@ -65,11 +66,16 @@ public class TestListener {
 //		log.info("Partition 1-9: {} Message: {}", partition, message);
 //	}
 	
-//	@PersonCustomListener(groupId = "group-1")
-//	public void create(Person person) {
-//		log.info("Thread: {}", Thread.currentThread().getId());
-//		log.info("Criar: {}", person);
-//	}
+	@PersonCustomListener(groupId = "group-1")
+    public void create(Person person) {
+//        log.info("Thread: {}", Thread.currentThread().getId());
+        log.info("Criar pessoa: {}", person);
+    }
+	
+	@KafkaListener(topics = "city-topic", groupId = "group-1", containerFactory = "jsonKafkaListenerContainerFactory")
+    public void create(City city) {
+        log.info("Criar cidade: {}", city);
+    }
 	
 //	@PersonCustomListener(groupId = "group-2")
 //	public void history(Person person) {

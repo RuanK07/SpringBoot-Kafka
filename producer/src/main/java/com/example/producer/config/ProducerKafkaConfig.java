@@ -39,7 +39,7 @@ public class ProducerKafkaConfig {
     }
     
     @Bean
-    public ProducerFactory<String, Object> JsonProducerFactory() {
+    public ProducerFactory<String, Object> jsonProducerFactory() {
         var configs = new HashMap<String, Object>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -48,8 +48,8 @@ public class ProducerKafkaConfig {
     }
     
     @Bean
-    public KafkaTemplate<String, Serializable> JsonKafkaTemplate() {
-        return new KafkaTemplate(JsonProducerFactory());
+    public KafkaTemplate<String, Serializable> jsonKafkaTemplate() {
+        return new KafkaTemplate(jsonProducerFactory());
     }
 
 
@@ -80,7 +80,8 @@ public class ProducerKafkaConfig {
     	return new KafkaAdmin.NewTopics(
     			TopicBuilder.name("topic-1").partitions(2).replicas(1).build(),
     			TopicBuilder.name("my-topic").partitions(10).build(),
-	            TopicBuilder.name("person-topic").partitions(2).build()
+	            TopicBuilder.name("person-topic").partitions(2).build(),
+	            TopicBuilder.name("city-topic").partitions(2).build()
 	    );
 	}
 }
