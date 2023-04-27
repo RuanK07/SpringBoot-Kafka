@@ -77,6 +77,7 @@ public class TestListener {
     public void create(Person person) {
 //        log.info("Thread: {}", Thread.currentThread().getId());
         log.info("Criar pessoa: {}", person);
+        throw new IllegalArgumentException("Teste");
     }
 	
 	@KafkaListener(topics = "city-topic", groupId = "group-1", containerFactory = "jsonKafkaListenerContainerFactory")

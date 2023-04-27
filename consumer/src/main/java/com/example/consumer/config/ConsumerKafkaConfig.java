@@ -3,7 +3,9 @@ package com.example.consumer.config;
 
 import java.util.HashMap;
 
+import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -65,17 +67,39 @@ public class ConsumerKafkaConfig {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, Person>();
         factory.setConsumerFactory(personConsumerFactory());
 //        factory.setRecordInterceptor(adultInterceptor());
+        factory.setRecordInterceptor(exampleInterceptor());
+//        factory.setBatchInterceptor();
         return factory;
     }
+    
+    private RecordInterceptor<String, Person> exampleInterceptor() {
+		return new RecordInterceptor<String, Person>() {
+			@Override
+			public ConsumerRecord<String, Person> intercept(ConsumerRecord<String, Person> record,
+					Consumer<String, Person> consumer) {
+				return record;
+			}
+			
+			@Override
+			public void success(final ConsumerRecord<String, Person> record, final Consumer<String, Person> Consumer) {
+				log.info("Sucesso");
+			}
+			
+			@Override
+			public void failure(final ConsumerRecord<String, Person> record,final Exception exception, final Consumer<String, Person> Consumer) {
+				log.info("Falha!");
+			}
+		};
+	}
 
     
-    private RecordInterceptor<String, Person> adultInterceptor() {
-        return (record, consumer) -> {
-            log.info("Record: {}", record);
-            var person = record.value();
-            return person.getAge() >= 18 ? record : null;
-        };
-    }
+//    private RecordInterceptor<String, Person> adultInterceptor() {
+//        return (record, consumer) -> {
+//            log.info("Record: {}", record);
+//            var person = record.value();
+//            return person.getAge() >= 18 ? record : null;
+//        };
+//    }
 
 	@Bean
 	public ConsumerFactory jsonConsumerFactory() {
