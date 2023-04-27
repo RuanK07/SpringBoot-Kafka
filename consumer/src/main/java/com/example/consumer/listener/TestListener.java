@@ -2,6 +2,7 @@ package com.example.consumer.listener;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,15 +22,20 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class TestListener {
 	
+//	@KafkaListener(topics = "topic-1", groupId = "group-1")
+//    public void listen(String message) {
+//        log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
+//   }
+	
 	@KafkaListener(topics = "topic-1", groupId = "group-1")
-    public void listen(String message) {
-        log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
+    public void listen(List<String> messages) {
+        log.info("Thread: {} Messages: {}", Thread.currentThread().getId(), messages);
    }
 	
-	@KafkaListener(topics = "my-topic", groupId = "my-group")
-	public void Listen2(String message) {
-		log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
-	}
+//	@KafkaListener(topics = "my-topic", groupId = "my-group")
+//	public void Listen2(String message) {
+//		log.info("Thread: {} Message: {}", Thread.currentThread().getId(), message);
+//	}
 	
 	//KafkaHeaders.OFFSET
 	//KafkaHeaders.RECEIVED_MESSAGE_KEY
