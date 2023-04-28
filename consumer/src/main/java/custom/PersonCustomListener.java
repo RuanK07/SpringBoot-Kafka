@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.kafka.annotation.KafkaListener;
 
+import com.example.consumer.handler.MyCustomHandler;
+
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @KafkaListener
@@ -21,4 +23,7 @@ public @interface PersonCustomListener {
 
     @AliasFor(annotation = KafkaListener.class, attribute = "containerFactory")
     String containerFactory() default "personKafkaListenerContainerFactory";
+    
+    @AliasFor(annotation = KafkaListener.class, attribute = "errorHandler")
+    String errorHandler() default "myCustomHandler";
 }
